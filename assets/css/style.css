@@ -1,0 +1,28 @@
+#game {
+
+}
+#word {
+width: 100%;
+}
+.letter {
+    background: black;
+    text-align: center;
+    font-size: 5em;
+    border: solid 1px red;
+    height: 100px;
+    width: 100px;
+    color: black;
+    float: left;
+}
+.showLetter {
+    color:white;
+}
+.clearfix {
+clear:both;
+}
+#guesses {
+    background:black;
+    color:white;
+    height: 200px;
+    width: 300px;
+}

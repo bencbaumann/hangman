@@ -74,8 +74,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_dictionary_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_style_css__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__css_style_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_game_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_game1_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_nodelist2array_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_game_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_game1_js__ = __webpack_require__(12);
 
 
 
@@ -84,39 +85,58 @@ var player = __webpack_require__(9);
 
 
 
+
 document.addEventListener("DOMContentLoaded", function(event) {
-const word = 
-    Object(__WEBPACK_IMPORTED_MODULE_0__modules_getRandomWord_js__["a" /* getRandomWord */])(Object(__WEBPACK_IMPORTED_MODULE_2__modules_dictionary_js__["a" /* dictionary */])());
-const wordLetters = Object(__WEBPACK_IMPORTED_MODULE_1__modules_getLettersFromWord_js__["a" /* getLettersFromWord */])(word);
-    
+  const word = Object(__WEBPACK_IMPORTED_MODULE_0__modules_getRandomWord_js__["a" /* getRandomWord */])(Object(__WEBPACK_IMPORTED_MODULE_2__modules_dictionary_js__["a" /* dictionary */])());
+  const wordLetters = Object(__WEBPACK_IMPORTED_MODULE_1__modules_getLettersFromWord_js__["a" /* getLettersFromWord */])(word);
 
-console.log(word);
-console.log(wordLetters);
-console.log(player);
-wordLetters.map(__WEBPACK_IMPORTED_MODULE_5__modules_game1_js__["c" /* setupCards */]);
+  console.log(word);
+  console.log(wordLetters);
+  console.log(player);
+  wordLetters.map(__WEBPACK_IMPORTED_MODULE_6__modules_game1_js__["c" /* setupCards */]);
 
-document.onkeyup = function(event){
-    if(Object(__WEBPACK_IMPORTED_MODULE_5__modules_game1_js__["guessedLetter"])(player)){
-        console.log("That was a guessed letter");
-    }
-    else{
-        if(Object(__WEBPACK_IMPORTED_MODULE_5__modules_game1_js__["b" /* letterInWord */])(event.key, wordLetters)){
-            console.log("nailed it");
-        }
-        else{
-            player.lives--;
-            console.log("close miss");
-        }
-        player.guesses.push(event.key);
-    }
-    if(player.lives === 0){
-        console.log("DEAD");
-    }
-    
-    console.log(player);
-}
+  const svgPaths = ["arm1", "arm2", "arm3", "arm4", "tree", "grave", "moon"];
+  const svg = document.getElementById("zombies");
+  const svgChildNodes = document.getElementById("zombies").childNodes;
+  const svgArray = Object(__WEBPACK_IMPORTED_MODULE_4__modules_nodelist2array_js__["a" /* nodelist2array */])(svgChildNodes);
+  const hideLayer = node =>
+    svg.getElementById(node).setAttribute("visibility", "hidden");
+  svgPaths.map(hideLayer);
+  const showLayer = node =>
+    svg.getElementById(node).setAttribute("visibility", "visible");
 
+  const livesDiv = document.getElementById("lives");
+  const messageDiv = document.getElementById("message");
+  const guessesDiv = document.getElementById("guesses");
+  messageDiv.innerHTML = "Please guess a letter";
+  livesDiv.innerHTML = player.lives;
+
+  document.onkeyup = function(event) {
+    if(player.lives >0){
+        if (Object(__WEBPACK_IMPORTED_MODULE_6__modules_game1_js__["a" /* guessedLetter */])(player)) {
+            messageDiv.innerHTML = "That was a guessed letter";
+          } else {
+            if (Object(__WEBPACK_IMPORTED_MODULE_6__modules_game1_js__["b" /* letterInWord */])(event.key, wordLetters)) {
+              messageDiv.innerHTML = "nailed it";
+            } else {
+              player.lives--;
+              livesDiv.innerHTML = player.lives;
+              showLayer(svgPaths.pop());
+              messageDiv.innerHTML = "close miss!";
+            }
+            player.guesses.push(event.key);
+            guessesDiv.innerHTML = player.guesses
+              .map(guess => ` ${guess} `)
+              .reduce((x, y) => x + y);
+          }
+          if (player.lives <= 0) {
+            messageDiv.innerHTML = "You're Dead!!!";
+          }
+          console.log(player);
+      }
+  };
 });
+
 
 /***/ }),
 /* 1 */
@@ -124,9 +144,6 @@ document.onkeyup = function(event){
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getRandomWord;
-// const selectWordFromDictionary =
-//   dictionary[Math.floor(Math.random() * dictionary.length)];
-// const lettersInWord = selectWordFromDictionary.split("");
 function getRandomWord(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
@@ -202,7 +219,7 @@ exports = module.exports = __webpack_require__(6)(undefined);
 
 
 // module
-exports.push([module.i, "#game {\n\n}\n#word {\nwidth: 100%;\n}\n.letter {\n    background: black;\n    text-align: center;\n    font-size: 5em;\n    border: solid 1px red;\n    height: 100px;\n    width: 100px;\n    color: black;\n    float: left;\n}\n.showLetter {\n    color:white;\n}\n.clearfix {\nclear:both;\n}\n#guesses {\n    background:black;\n    color:white;\n    height: 200px;\n    width: 300px;\n}", ""]);
+exports.push([module.i, "#game {\n}\n#word {\n  width: 100%;\n}\n#lives {\n  background: teal;\n  color: white;\n  height: 100px;\n  width: 100px;\n  text-align: center;\n  font-size: 5em;\n}\n#guesses {\n  background: darkslategrey;\n  color: white;\n  height: 100px;\n  text-align: center;\n  font-size: 5em;\n}\n#message {\n    background: beige;\n    font-size: 2em;\n    padding: 20px;\n}\n.letter {\n  background: black;\n  text-align: center;\n  font-size: 5em;\n  border: solid 1px red;\n  height: 100px;\n  width: 100px;\n  color: black;\n  float: left;\n}\n.showLetter {\n  color: white;\n}\n.clearfix {\n  clear: both;\n}\n\n", ""]);
 
 // exports
 
@@ -747,10 +764,25 @@ module.exports = function (css) {
 /* 9 */
 /***/ (function(module, exports) {
 
-module.exports = {"name":"player1","lives":6,"guesses":[]}
+module.exports = {"name":"player1","lives":7,"guesses":[]}
 
 /***/ }),
 /* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = nodelist2array;
+function nodelist2array(nodelist) {
+    var array = [];
+    for (var index = 0; index < nodelist.length; index++) {
+        array.push(nodelist[index]);
+    }
+    console.log(array);
+    return array;
+}
+
+/***/ }),
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -809,15 +841,16 @@ function game() {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(module) {/* harmony export (immutable) */ __webpack_exports__["b"] = letterInWord;
+/* harmony export (immutable) */ __webpack_exports__["a"] = guessedLetter;
+/* harmony export (immutable) */ __webpack_exports__["b"] = letterInWord;
 /* harmony export (immutable) */ __webpack_exports__["c"] = setupCards;
 const showClass = match => match.classList.add("showLetter");
 
-const guessedLetter = function(player) {
+function guessedLetter(player) {
   return player.guesses.includes(event.key);
 }
 
@@ -836,38 +869,7 @@ function setupCards (letter) {
     word.appendChild(divLetter);
   };
 
-  module.exports = guessedLetter;
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(12)(module)))
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-module.exports = function(originalModule) {
-	if(!originalModule.webpackPolyfill) {
-		var module = Object.create(originalModule);
-		// module.parent = undefined by default
-		if(!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function() {
-				return module.i;
-			}
-		});
-		Object.defineProperty(module, "exports", {
-			enumerable: true,
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
+  
 
 /***/ })
 /******/ ]);

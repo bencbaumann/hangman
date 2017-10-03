@@ -1,28 +1,42 @@
 #game {
-
 }
 #word {
-width: 100%;
+  width: 100%;
 }
-.letter {
-    background: black;
-    text-align: center;
-    font-size: 5em;
-    border: solid 1px red;
-    height: 100px;
-    width: 100px;
-    color: black;
-    float: left;
-}
-.showLetter {
-    color:white;
-}
-.clearfix {
-clear:both;
+#lives {
+  background: teal;
+  color: white;
+  height: 100px;
+  width: 100px;
+  text-align: center;
+  font-size: 5em;
 }
 #guesses {
-    background:black;
-    color:white;
-    height: 200px;
-    width: 300px;
+  background: darkslategrey;
+  color: white;
+  height: 100px;
+  text-align: center;
+  font-size: 5em;
 }
+#message {
+    background: beige;
+    font-size: 2em;
+    padding: 20px;
+}
+.letter {
+  background: black;
+  text-align: center;
+  font-size: 5em;
+  border: solid 1px red;
+  height: 100px;
+  width: 100px;
+  color: black;
+  float: left;
+}
+.showLetter {
+  color: white;
+}
+.clearfix {
+  clear: both;
+}
+

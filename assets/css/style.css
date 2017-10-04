@@ -1,16 +1,31 @@
+body {
+  padding: 0px;
+  margin: 0px;
+}
 #game {
+    padding: 20px;
+}
+#svg {
+  float: left;
+  width: 50%;
+}
+#gameInfo {
+    padding: 2.5%;
+  float: right;
+  width: 45%;
 }
 #word {
-  width: 100%;
+    background:red;
+    text-align: center;
+    margin:auto;
 }
-#lives {
+/* #lives {
   background: teal;
   color: white;
   height: 100px;
-  width: 100px;
   text-align: center;
   font-size: 5em;
-}
+} */
 #guesses {
   background: darkslategrey;
   color: white;
@@ -19,24 +34,63 @@
   font-size: 5em;
 }
 #message {
-    background: beige;
-    font-size: 2em;
-    padding: 20px;
+  font-size: 2em;
+  padding: 20px;
+}
+.success {
+  background: lightgreen;
+  border: solid 1px green;
+}
+.error {
+  background: lightsalmon;
+  border: solid 1px red;
 }
 .letter {
-  background: black;
+  width: 7%;
+  margin: 0 10px;
+  background: white;
   text-align: center;
   font-size: 5em;
-  border: solid 1px red;
-  height: 100px;
-  width: 100px;
-  color: black;
+  border-bottom: solid 5px black;
+  color: white;
   float: left;
 }
 .showLetter {
-  color: white;
+  color: black;
 }
 .clearfix {
   clear: both;
 }
 
+
+#model{
+    background: black;
+    color: white;
+    position: fixed;
+    width: 500px;
+    height: 200px;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px; /* Negative half of height. */
+    margin-left: -250px;
+
+}
+#model button{
+    background: red;
+    border: none;
+    color: white;
+    padding: 20px;
+}
+#model-outer{
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 0.5;
+    height: 100%;
+    width: 100%;
+    background: red;
+}
+#model-inner{
+    text-align: center;
+    padding: 20px;
+}

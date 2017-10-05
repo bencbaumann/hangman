@@ -35,6 +35,8 @@ export function uiState(game){
     "startGame": function(){
         // hides all the svgPaths that get exposed on wrong guesses
         game.reset();
+        var audio = new Audio('../../sounds/pacman.mp3');
+        audio.play();
         console.log(game);
         this.messageDiv.innerHTML = "Please guess a letter";
         this.hideLayer("win");

@@ -1,124 +1,71 @@
-import { dictionary } from "./modules/dictionary.js";
-import { getRandomWord } from "./modules/getRandomWord.js";
-import { getLettersFromWord } from "./modules/getLettersFromWord.js";
-import { getUniqueLetters } from "./modules/getUniqueLetters.js";
 import { getAd } from "./modules/getAd.js";
 import "../css/style.css";
 import { gameState } from "./modules/gameState.js";
-import { nodelist2array } from "./modules/nodelist2array.js";
-import { guessedLetter, letterInWord, setupCards } from "./modules/game.js";
-
+import { uiState } from "./modules/uiState.js";
 
 document.addEventListener("DOMContentLoaded", function(event) {
   var game = gameState();
-  // var gameState = gameState();  
+  var ui = uiState(game);
 
-  /* Nodes from SVG DOM */
-  const livesDiv = document.getElementById("lives");
+  ui.startGame();
 
-  /*DOM Nodes */
-  const messageDiv = document.getElementById("message");
-  const guessesDiv = document.getElementById("guesses");
-  const adsDiv = document.getElementById("ads");
-  const yesPlay = document.getElementById("yesPlay");
-  const noPlay = document.getElementById("noPlay");
-  yesPlay.addEventListener('click', ()=>{
-    hideModel();
-    console.log(game);
-    game.reset();
-    console.log(game);
+  // Event Listenors
+  ui.yesPlay.addEventListener("click", () => {
+    ui.startGame();
   });
-  noPlay.addEventListener('click', ()=>{
+  ui.noPlay.addEventListener("click", () => {
     document.write("<h1>Thanks for Playing</h1>");
   });
-  
- 
-
-  const svgPaths = ["arm1", "arm2", "arm3", "arm4", "tree", "grave", "moon"];
-  const svg = document.getElementById("zombies");
-  const svgChildNodes = document.getElementById("zombies").childNodes;
-  const svgArray = nodelist2array(svgChildNodes);
-
-  const showLayer = node =>
-    svg.getElementById(node).setAttribute("visibility", "visible");
-  
-  function newGame() {
-    game.word = getRandomWord(dictionary());
-
-    console.log(game.word);
-    game.wordLetters = getLettersFromWord(game.word);
-    game.uniqueLetters = getUniqueLetters(game.wordLetters);
-    console.log("game:" + game);
-    game.wordLetters.map(setupCards);
-    const hideLayer = node =>
-      svg.getElementById(node).setAttribute("visibility", "hidden");
-    svgPaths.map(hideLayer);
-    messageDiv.innerHTML = "Please guess a letter";
-    hideLayer("win");
-    hideLayer("lose");
-    // hideModel();
-    console.log(game);
-  }
-
-  newGame();
-
-  function hideModel() {
-    document
-      .getElementById("model-outer")
-      .setAttribute("style", "visibility: hidden");
-    document
-      .getElementById("model")
-      .setAttribute("style", "visibility: hidden");
-  }
-  function showModel() {
-    document
-      .getElementById("model-outer")
-      .setAttribute("style", "visibility: visible");
-    document
-      .getElementById("model")
-      .setAttribute("style", "visibility: visible");
-  }
-
-  //   ads.innerHTML = livesDiv.innerHTML = gameState.lives;
 
   document.onkeyup = function(event) {
-    const currentLetter = event.key;
-    if (game.lives > 0) {
-      console.log(game.wordLetters.length);
-
-      if (guessedLetter(currentLetter, game)) {
-        messageDiv.innerHTML = "That was a guessed letter";
-      } else {
-        if (letterInWord(currentLetter, game.wordLetters)) {
-          messageDiv.classList = "success";
-          messageDiv.innerHTML = "nailed it";
-          //   Maybe delete
-          game.uniqueLetters = game.uniqueLetters.filter(letter => letter !== currentLetter);
-          if (game.uniqueLetters.length === 0) {
-            messageDiv.classList = "success";
-            messageDiv.innerHTML = "You Win";
-            showLayer("win");
-            showModel();
-          }
+    const currentLetter = event.key.toLowerCase();
+    if (currentLetter.length===1 && game.inProgress ===true) {
+      if (game.lives > 0) {
+        if (game.guessedLetter(currentLetter, game)) {
+          ui.messageDiv.innerHTML = "That was a guessed letter";
         } else {
-          messageDiv.classList = "error";
-          game.lives--;
-          livesDiv.textContent = game.lives;
-          showLayer(svgPaths.pop());
-          messageDiv.innerHTML = "close miss!";
+          if (game.letterInWord(currentLetter, game.wordLetters)) {
+            ui.msg("Nailed It", "success");
+            // This could be prettier
+            game.uniqueLetters = game.uniqueLetters.filter(
+              letter => letter !== currentLetter
+            );
+            if (game.uniqueLetters.length === 0) {
+              game.inProgress=false;
+              game.wins++;
+              ui.setWins();
+              // ui.winsDiv.innerHTML = `Wins: ${game.wins} | Losses: ${game.losses}`;
+              ui.msg("You Win!", "success");
+              ui.showLayer("win");
+              ui.showModel();
+            }
+          } else {
+            game.lives--;
+            ui.livesDiv.textContent = game.lives;
+            ui.showLayer(ui.svgPaths.pop());
+            ui.msg("close miss!", "error");
+          }
+          game.guesses.push(currentLetter);
+          ui.guessesDiv.innerHTML = game.guesses
+            .map(guess => ` ${guess} `)
+            .reduce((x, y) => x + y);
         }
-        game.guesses.push(currentLetter);
-        guessesDiv.innerHTML = game.guesses
-          .map(guess => ` ${guess} `)
-          .reduce((x, y) => x + y);
-      }
-      if (game.lives <= 0) {
-        messageDiv.classList = "error";
-        messageDiv.innerHTML = "You're Dead!!!";
-        showLayer("lose");
-        showModel();
-      }
+        if (game.lives <= 0) {
+          game.inProgress=false;
+          game.losses++;
+          ui.winsDiv.innerHTML = `Wins: ${game.wins} | Losses: ${game.losses}`;
+          ui.msg("You're Dead!!!", "error");
+          ui.showLayer("lose");
+          ui.showModel();
+        }
+      } // end if games.lives > 0 
+
       console.log(game);
     }
+    else if(game.inProgress===true){
+      ui.msg("Not a letter", "error");
+      console.log(currentLetter);
+    }
+    ui.debug();
   };
 });

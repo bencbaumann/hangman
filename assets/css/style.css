@@ -19,13 +19,6 @@ body {
     text-align: center;
     margin:auto;
 }
-/* #lives {
-  background: teal;
-  color: white;
-  height: 100px;
-  text-align: center;
-  font-size: 5em;
-} */
 #guesses {
   background: darkslategrey;
   color: white;

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -68,196 +68,87 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = dictionary;
-function dictionary() {
-    return [
-        "umbrella",
-        "doberman",
-        "computer",
-        "laptop",
-        "screen",
-        "lightbulb",
-        "party"
-      ];
-  }
-  
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = getRandomWord;
-function getRandomWord(array) {
-  return array[Math.floor(Math.random() * array.length)];
-}
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = getLettersFromWord;
-function getLettersFromWord(word) {
-  return word.split("");
-}
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = getUniqueLetters;
-function getUniqueLetters(array) {
-    return [... new Set(array)];
-}
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_dictionary_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_getRandomWord_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_getLettersFromWord_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_getUniqueLetters_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_getAd_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__css_style_css__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__css_style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__css_style_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_gameState_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modules_nodelist2array_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__modules_game_js__ = __webpack_require__(13);
-
-
-
-
-
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_getAd_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_style_css__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__css_style_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_gameState_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_uiState_js__ = __webpack_require__(12);
 
 
 
 
 
 document.addEventListener("DOMContentLoaded", function(event) {
-  var game = Object(__WEBPACK_IMPORTED_MODULE_6__modules_gameState_js__["a" /* gameState */])();
-  // var gameState = gameState();  
+  var game = Object(__WEBPACK_IMPORTED_MODULE_2__modules_gameState_js__["a" /* gameState */])();
+  var ui = Object(__WEBPACK_IMPORTED_MODULE_3__modules_uiState_js__["a" /* uiState */])(game);
 
-  /* Nodes from SVG DOM */
-  const livesDiv = document.getElementById("lives");
+  ui.startGame();
 
-  /*DOM Nodes */
-  const messageDiv = document.getElementById("message");
-  const guessesDiv = document.getElementById("guesses");
-  const adsDiv = document.getElementById("ads");
-  const yesPlay = document.getElementById("yesPlay");
-  const noPlay = document.getElementById("noPlay");
-  yesPlay.addEventListener('click', ()=>{
-    hideModel();
-    console.log(game);
-    game.reset();
-    console.log(game);
+  // Event Listenors
+  ui.yesPlay.addEventListener("click", () => {
+    ui.startGame();
   });
-  noPlay.addEventListener('click', ()=>{
+  ui.noPlay.addEventListener("click", () => {
     document.write("<h1>Thanks for Playing</h1>");
   });
-  
- 
-
-  const svgPaths = ["arm1", "arm2", "arm3", "arm4", "tree", "grave", "moon"];
-  const svg = document.getElementById("zombies");
-  const svgChildNodes = document.getElementById("zombies").childNodes;
-  const svgArray = Object(__WEBPACK_IMPORTED_MODULE_7__modules_nodelist2array_js__["a" /* nodelist2array */])(svgChildNodes);
-
-  const showLayer = node =>
-    svg.getElementById(node).setAttribute("visibility", "visible");
-  
-  function newGame() {
-    game.word = Object(__WEBPACK_IMPORTED_MODULE_1__modules_getRandomWord_js__["a" /* getRandomWord */])(Object(__WEBPACK_IMPORTED_MODULE_0__modules_dictionary_js__["a" /* dictionary */])());
-
-    console.log(game.word);
-    game.wordLetters = Object(__WEBPACK_IMPORTED_MODULE_2__modules_getLettersFromWord_js__["a" /* getLettersFromWord */])(game.word);
-    game.uniqueLetters = Object(__WEBPACK_IMPORTED_MODULE_3__modules_getUniqueLetters_js__["a" /* getUniqueLetters */])(game.wordLetters);
-    console.log("game:" + game);
-    game.wordLetters.map(__WEBPACK_IMPORTED_MODULE_8__modules_game_js__["c" /* setupCards */]);
-    const hideLayer = node =>
-      svg.getElementById(node).setAttribute("visibility", "hidden");
-    svgPaths.map(hideLayer);
-    messageDiv.innerHTML = "Please guess a letter";
-    hideLayer("win");
-    hideLayer("lose");
-    // hideModel();
-    console.log(game);
-  }
-
-  newGame();
-
-  function hideModel() {
-    document
-      .getElementById("model-outer")
-      .setAttribute("style", "visibility: hidden");
-    document
-      .getElementById("model")
-      .setAttribute("style", "visibility: hidden");
-  }
-  function showModel() {
-    document
-      .getElementById("model-outer")
-      .setAttribute("style", "visibility: visible");
-    document
-      .getElementById("model")
-      .setAttribute("style", "visibility: visible");
-  }
-
-  //   ads.innerHTML = livesDiv.innerHTML = gameState.lives;
 
   document.onkeyup = function(event) {
-    const currentLetter = event.key;
-    if (game.lives > 0) {
-      console.log(game.wordLetters.length);
-
-      if (Object(__WEBPACK_IMPORTED_MODULE_8__modules_game_js__["a" /* guessedLetter */])(currentLetter, game)) {
-        messageDiv.innerHTML = "That was a guessed letter";
-      } else {
-        if (Object(__WEBPACK_IMPORTED_MODULE_8__modules_game_js__["b" /* letterInWord */])(currentLetter, game.wordLetters)) {
-          messageDiv.classList = "success";
-          messageDiv.innerHTML = "nailed it";
-          //   Maybe delete
-          game.uniqueLetters = game.uniqueLetters.filter(letter => letter !== currentLetter);
-          if (game.uniqueLetters.length === 0) {
-            messageDiv.classList = "success";
-            messageDiv.innerHTML = "You Win";
-            showLayer("win");
-            showModel();
-          }
+    const currentLetter = event.key.toLowerCase();
+    if (currentLetter.length===1 && game.inProgress ===true) {
+      if (game.lives > 0) {
+        if (game.guessedLetter(currentLetter, game)) {
+          ui.messageDiv.innerHTML = "That was a guessed letter";
         } else {
-          messageDiv.classList = "error";
-          game.lives--;
-          livesDiv.textContent = game.lives;
-          showLayer(svgPaths.pop());
-          messageDiv.innerHTML = "close miss!";
+          if (game.letterInWord(currentLetter, game.wordLetters)) {
+            ui.msg("Nailed It", "success");
+            // This could be prettier
+            game.uniqueLetters = game.uniqueLetters.filter(
+              letter => letter !== currentLetter
+            );
+            if (game.uniqueLetters.length === 0) {
+              game.inProgress=false;
+              game.wins++;
+              ui.setWins();
+              // ui.winsDiv.innerHTML = `Wins: ${game.wins} | Losses: ${game.losses}`;
+              ui.msg("You Win!", "success");
+              ui.showLayer("win");
+              ui.showModel();
+            }
+          } else {
+            game.lives--;
+            ui.livesDiv.textContent = game.lives;
+            ui.showLayer(ui.svgPaths.pop());
+            ui.msg("close miss!", "error");
+          }
+          game.guesses.push(currentLetter);
+          ui.guessesDiv.innerHTML = game.guesses
+            .map(guess => ` ${guess} `)
+            .reduce((x, y) => x + y);
         }
-        game.guesses.push(currentLetter);
-        guessesDiv.innerHTML = game.guesses
-          .map(guess => ` ${guess} `)
-          .reduce((x, y) => x + y);
-      }
-      if (game.lives <= 0) {
-        messageDiv.classList = "error";
-        messageDiv.innerHTML = "You're Dead!!!";
-        showLayer("lose");
-        showModel();
-      }
+        if (game.lives <= 0) {
+          game.inProgress=false;
+          game.losses++;
+          ui.winsDiv.innerHTML = `Wins: ${game.wins} | Losses: ${game.losses}`;
+          ui.msg("You're Dead!!!", "error");
+          ui.showLayer("lose");
+          ui.showModel();
+        }
+      } // end if games.lives > 0 
+
       console.log(game);
     }
+    else if(game.inProgress===true){
+      ui.msg("Not a letter", "error");
+      console.log(currentLetter);
+    }
+    ui.debug();
   };
 });
 
 
 /***/ }),
-/* 5 */
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -273,13 +164,13 @@ function getAds() {
   
 
 /***/ }),
-/* 6 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(7);
+var content = __webpack_require__(3);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -287,7 +178,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(9)(content, options);
+var update = __webpack_require__(5)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -304,21 +195,21 @@ if(false) {
 }
 
 /***/ }),
-/* 7 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(8)(undefined);
+exports = module.exports = __webpack_require__(4)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, "body {\n  padding: 0px;\n  margin: 0px;\n}\n#game {\n    padding: 20px;\n}\n#svg {\n  float: left;\n  width: 50%;\n}\n#gameInfo {\n    padding: 2.5%;\n  float: right;\n  width: 45%;\n}\n#word {\n    background:red;\n    text-align: center;\n    margin:auto;\n}\n/* #lives {\n  background: teal;\n  color: white;\n  height: 100px;\n  text-align: center;\n  font-size: 5em;\n} */\n#guesses {\n  background: darkslategrey;\n  color: white;\n  height: 100px;\n  text-align: center;\n  font-size: 5em;\n}\n#message {\n  font-size: 2em;\n  padding: 20px;\n}\n.success {\n  background: lightgreen;\n  border: solid 1px green;\n}\n.error {\n  background: lightsalmon;\n  border: solid 1px red;\n}\n.letter {\n  width: 7%;\n  margin: 0 10px;\n  background: white;\n  text-align: center;\n  font-size: 5em;\n  border-bottom: solid 5px black;\n  color: white;\n  float: left;\n}\n.showLetter {\n  color: black;\n}\n.clearfix {\n  clear: both;\n}\n\n\n#model{\n    background: black;\n    color: white;\n    position: fixed;\n    width: 500px;\n    height: 200px;\n    top: 50%;\n    left: 50%;\n    margin-top: -100px; /* Negative half of height. */\n    margin-left: -250px;\n\n}\n#model button{\n    background: red;\n    border: none;\n    color: white;\n    padding: 20px;\n}\n#model-outer{\n    position: fixed;\n    top: 0;\n    left: 0;\n    opacity: 0.1;\n    height: 100%;\n    width: 100%;\n    background: red;\n}\n#model-inner{\n    text-align: center;\n    padding: 20px;\n}", ""]);
+exports.push([module.i, "body {\n  padding: 0px;\n  margin: 0px;\n}\n#game {\n    padding: 20px;\n}\n#svg {\n  float: left;\n  width: 50%;\n}\n#gameInfo {\n    padding: 2.5%;\n  float: right;\n  width: 45%;\n}\n#word {\n    background:red;\n    text-align: center;\n    margin:auto;\n}\n#guesses {\n  background: darkslategrey;\n  color: white;\n  height: 100px;\n  text-align: center;\n  font-size: 5em;\n}\n#message {\n  font-size: 2em;\n  padding: 20px;\n}\n.success {\n  background: lightgreen;\n  border: solid 1px green;\n}\n.error {\n  background: lightsalmon;\n  border: solid 1px red;\n}\n.letter {\n  width: 7%;\n  margin: 0 10px;\n  background: white;\n  text-align: center;\n  font-size: 5em;\n  border-bottom: solid 5px black;\n  color: white;\n  float: left;\n}\n.showLetter {\n  color: black;\n}\n.clearfix {\n  clear: both;\n}\n\n\n#model{\n    background: black;\n    color: white;\n    position: fixed;\n    width: 500px;\n    height: 200px;\n    top: 50%;\n    left: 50%;\n    margin-top: -100px; /* Negative half of height. */\n    margin-left: -250px;\n\n}\n#model button{\n    background: red;\n    border: none;\n    color: white;\n    padding: 20px;\n}\n#model-outer{\n    position: fixed;\n    top: 0;\n    left: 0;\n    opacity: 0.1;\n    height: 100%;\n    width: 100%;\n    background: red;\n}\n#model-inner{\n    text-align: center;\n    padding: 20px;\n}", ""]);
 
 // exports
 
 
 /***/ }),
-/* 8 */
+/* 4 */
 /***/ (function(module, exports) {
 
 /*
@@ -400,7 +291,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 9 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -446,7 +337,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(10);
+var	fixUrls = __webpack_require__(6);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -759,7 +650,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 10 */
+/* 6 */
 /***/ (function(module, exports) {
 
 
@@ -854,15 +745,15 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 11 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = gameState;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dictionary_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRandomWord_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getLettersFromWord_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__getUniqueLetters_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dictionary_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRandomWord_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getLettersFromWord_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__getUniqueLetters_js__ = __webpack_require__(11);
 
 
 
@@ -870,20 +761,90 @@ module.exports = function (css) {
 
 function gameState(){
   return {
+    "inProgress": true,
     "name": "",
-    "lives": 7,
+    "lives": 0,
     "guesses": [],
     "word": "",
     "wordLetters": [],
     "uniqueLetters": [],
+    "wins": 0,
+    "losses": 0,
     "reset": function(){
+      this.inProgress = true;
       this.lives=7;
       this.guesses = [];
       this.word = Object(__WEBPACK_IMPORTED_MODULE_1__getRandomWord_js__["a" /* getRandomWord */])(Object(__WEBPACK_IMPORTED_MODULE_0__dictionary_js__["a" /* dictionary */])());
-      this.wordLetters = Object(__WEBPACK_IMPORTED_MODULE_2__getLettersFromWord_js__["a" /* getLettersFromWord */])(game.word);
+      this.wordLetters = Object(__WEBPACK_IMPORTED_MODULE_2__getLettersFromWord_js__["a" /* getLettersFromWord */])(this.word);
       this.uniqueLetters = Object(__WEBPACK_IMPORTED_MODULE_3__getUniqueLetters_js__["a" /* getUniqueLetters */])(this.wordLetters);
-    }
+    },
+    "guessedLetter": function(currentLetter){
+      return this.guesses.includes(currentLetter);
+    },
+    "letterInWord": function(letter){
+      let matches = document.getElementsByClassName(`letter${event.key}`);
+      var nodes = Array.prototype.slice.call(matches);
+      nodes.map(this.showClass);
+      return this.word.includes(letter);
+    },
+    "showClass": function (match) { return match.classList.add("showLetter")}
   }
+}
+
+
+// game.uniqueLetters = game.uniqueLetters.filter(
+//   letter => letter !== currentLetter
+// );
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = dictionary;
+function dictionary() {
+    return [
+        "umbrella",
+        "doberman",
+        "computer",
+        "laptop",
+        "screen",
+        "lightbulb",
+        "party"
+      ];
+  }
+  
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = getRandomWord;
+function getRandomWord(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = getLettersFromWord;
+function getLettersFromWord(word) {
+  return word.split("");
+}
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = getUniqueLetters;
+function getUniqueLetters(array) {
+    return [... new Set(array)];
 }
 
 /***/ }),
@@ -891,24 +852,149 @@ function gameState(){
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = nodelist2array;
-function nodelist2array(nodelist) {
-    var array = [];
-    for (var index = 0; index < nodelist.length; index++) {
-        array.push(nodelist[index]);
-    }
-    console.log(array);
-    return array;
+/* harmony export (immutable) */ __webpack_exports__["a"] = uiState;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__hideLayer_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__showLayer_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_js__ = __webpack_require__(15);
+/* Dependancies */
+
+
+
+
+/* Nodes from SVG DOM */
+const svg = document.getElementById("zombies");
+const livesDiv = document.getElementById("lives");
+
+/* Nodes from HTML DOM */
+const messageDiv = document.getElementById("message");
+const guessesDiv = document.getElementById("guesses");
+const winsDiv = document.getElementById("wins");
+const adsDiv = document.getElementById("ads");
+const debugDiv = document.getElementById("debug");
+const yesPlay = document.getElementById("yesPlay");
+const noPlay = document.getElementById("noPlay");
+
+
+function uiState(game){
+  return {
+    /* HTML DOM */
+    "messageDiv": messageDiv,
+    "guessesDiv": guessesDiv,
+    "adsDiv": adsDiv,
+    "debugDiv": debugDiv,
+    "yesPlay": yesPlay,
+    "noPlay": noPlay,
+    "word": word,
+    "winsDiv": winsDiv,
+    /* SVG DOM */
+    "svgPaths" : ["arm1", "arm2", "arm3", "arm4", "tree", "grave", "moon"],
+    "livesDiv": livesDiv,
+    "svg": svg,
+    "startGame": function(){
+        // hides all the svgPaths that get exposed on wrong guesses
+        game.reset();
+        console.log(game);
+        this.messageDiv.innerHTML = "Please guess a letter";
+        this.hideLayer("win");
+        this.hideLayer("lose");
+        this.hideModel();
+        this.clearCards();
+        this.clearGuessesDiv();
+        game.wordLetters.map(this.setupCards);
+        this.resetSvg();
+    },
+    "hideModel": function(){
+        document
+        .getElementById("model-outer")
+        .setAttribute("style", "visibility: hidden");
+        document
+        .getElementById("model")
+        .setAttribute("style", "visibility: hidden");
+    },
+    "showModel": function(){
+        document
+        .getElementById("model-outer")
+        .setAttribute("style", "visibility: visible");
+        document
+        .getElementById("model")
+        .setAttribute("style", "visibility: visible");
+    },
+    "hideLayer": function(node){
+        Object(__WEBPACK_IMPORTED_MODULE_0__hideLayer_js__["a" /* hideLayer */])(node);
+    },
+    "showLayer": function(node){
+        Object(__WEBPACK_IMPORTED_MODULE_1__showLayer_js__["a" /* showLayer */])(node);
+    },
+    "clearCards": function(){
+        const word = document.getElementById("word");
+        word.innerHTML="";
+    },
+    "setupCards": function (letter) {
+        const word = document.getElementById("word");
+        var divLetter = document.createElement("div");
+        divLetter.classList = `letter letter${letter}`;
+        divLetter.innerHTML = letter;
+        word.appendChild(divLetter);
+    },
+    "clearGuessesDiv": function(){
+        guessesDiv.innerHTML ="";
+    },
+    "resetSvg": function(){
+        livesDiv.textContent = game.lives;
+        this.svgPaths = ["arm1", "arm2", "arm3", "arm4", "tree", "grave", "moon"];
+        this.svgPaths.map(__WEBPACK_IMPORTED_MODULE_0__hideLayer_js__["a" /* hideLayer */]);
+    },
+    "msg": function(message, msgClass){
+        if(msgClass){
+            this.messageDiv.classList = msgClass;
+        }
+        this.messageDiv.innerHTML = message;
+    },
+    "debug": function(){
+        this.debugDiv.innerHTML = `<pre>${JSON.stringify(game, null, 2)}</pre>`;
+    },
+    "setWins": function(){
+        this.winsDiv.innerHTML = `Wins: ${game.wins} | Losses: ${game.losses}`;
+    }    
+  }
 }
+
+
 
 /***/ }),
 /* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = guessedLetter;
-/* harmony export (immutable) */ __webpack_exports__["b"] = letterInWord;
-/* harmony export (immutable) */ __webpack_exports__["c"] = setupCards;
+/* harmony export (immutable) */ __webpack_exports__["a"] = hideLayer;
+function hideLayer(node){
+    const svg = document.getElementById("zombies");
+    svg.getElementById(node).setAttribute("visibility", "hidden");
+}
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = showLayer;
+// const svgChildNodes = document.getElementById("zombies").childNodes;
+// const svgArray = nodelist2array(svgChildNodes);
+
+function showLayer(node){
+    const svg = document.getElementById("zombies");
+    svg.getElementById(node).setAttribute("visibility", "visible");
+}
+  
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export guessedLetter */
+/* unused harmony export letterInWord */
 const showClass = match => match.classList.add("showLetter");
 
 function guessedLetter(currentLetter, gameState) {
@@ -923,15 +1009,6 @@ function letterInWord(letter, word){
     nodes.map(showClass);
     return word.includes(letter);
 }
-
-function setupCards (letter) {
-    var divLetter = document.createElement("div");
-    divLetter.classList = `letter letter${letter}`;
-    divLetter.innerHTML = letter;
-    const word = document.getElementById("word");
-    word.appendChild(divLetter);
-  };
-
   
 
 /***/ })

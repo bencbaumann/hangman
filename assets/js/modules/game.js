@@ -12,13 +12,4 @@ export function letterInWord(letter, word){
     nodes.map(showClass);
     return word.includes(letter);
 }
-
-export function setupCards (letter) {
-    var divLetter = document.createElement("div");
-    divLetter.classList = `letter letter${letter}`;
-    divLetter.innerHTML = letter;
-    const word = document.getElementById("word");
-    word.appendChild(divLetter);
-  };
-
   

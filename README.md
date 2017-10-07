@@ -3,7 +3,8 @@
 
 # to start
 * npm install -g http-server
-* http-server
+* npm install
+* npm start
 * Check console for host location, usually http://localhost:8080 if nothing is on that port
 
 # To Do

@@ -5,6 +5,7 @@ import { getUniqueLetters } from "./getUniqueLetters.js";
 
 export function gameState(){
   return {
+    "debug": false,
     "inProgress": true,
     "name": "",
     "lives": 0,
@@ -28,14 +29,15 @@ export function gameState(){
     "letterInWord": function(letter){
       let matches = document.getElementsByClassName(`letter${event.key}`);
       var nodes = Array.prototype.slice.call(matches);
-      nodes.map(this.showClass);
+      nodes.map(this.addClass);
+      nodes.map(this.removeClass);
       return this.word.includes(letter);
     },
-    "showClass": function (match) { return match.classList.add("showLetter")}
+    "addClass": function (match) { 
+      return match.classList.add("showLetter")
+    },
+    "removeClass": function(match){
+      match.classList.remove("underline");
+    }
   }
 }
-
-
-// game.uniqueLetters = game.uniqueLetters.filter(
-//   letter => letter !== currentLetter
-// );

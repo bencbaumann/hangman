@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -68,11 +68,22 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = getRandomWord;
+function getRandomWord(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_getAd_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_style_css__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_getAd_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_style_css__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__css_style_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_gameState_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_gameState_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_uiState_js__ = __webpack_require__(12);
 
 
@@ -92,53 +103,60 @@ document.addEventListener("DOMContentLoaded", function(event) {
   ui.noPlay.addEventListener("click", () => {
     document.write("<h1>Thanks for Playing</h1>");
   });
-
+  
   document.onkeyup = function(event) {
     const currentLetter = event.key.toLowerCase();
-    if (currentLetter.length===1 && game.inProgress ===true) {
-      if (game.lives > 0) {
-        if (game.guessedLetter(currentLetter, game)) {
-          ui.messageDiv.innerHTML = "That was a guessed letter";
-        } else {
-          if (game.letterInWord(currentLetter, game.wordLetters)) {
-            ui.msg("Nailed It", "success");
-            // This could be prettier
-            game.uniqueLetters = game.uniqueLetters.filter(
-              letter => letter !== currentLetter
-            );
-            if (game.uniqueLetters.length === 0) {
-              game.inProgress=false;
-              game.wins++;
-              ui.setWins();
-              // ui.winsDiv.innerHTML = `Wins: ${game.wins} | Losses: ${game.losses}`;
-              ui.msg("You Win!", "success");
-              ui.showLayer("win");
-              ui.showModel();
-            }
-          } else {
-            game.lives--;
-            ui.livesDiv.textContent = game.lives;
-            ui.showLayer(ui.svgPaths.pop());
-            ui.msg("close miss!", "error");
+    // Check to see if the game is in progress, and that a letter was pressed.
+    if (currentLetter.length === 1 && game.inProgress === true) {
+      // Checks if the player already guessed this letter
+      if (game.guessedLetter(currentLetter, game)) {
+        ui.messageDiv.innerHTML = "That was a guessed letter";
+      } else {
+        ui.showGuess(currentLetter);
+        // The player guessed correct
+        if (game.letterInWord(currentLetter, game.wordLetters)) {
+          ui.msg(ui.getRandomWord(ui.successMessages), "success");
+          ui.playSuccess();
+          // Remove a guessed letter from the unique letters array
+          game.uniqueLetters = game.uniqueLetters.filter(letter => letter !== currentLetter);
+          // Checks if the player won
+          if (game.uniqueLetters.length === 0) {
+            game.inProgress = false;
+            game.wins++;
+            ui.setWins();
+            ui.msg("You Win!", "success");
+            ui.showLayer("win");
+            ui.showModel();
+            ui.playWin();
           }
-          game.guesses.push(currentLetter);
-          ui.guessesDiv.innerHTML = game.guesses
-            .map(guess => ` ${guess} `)
-            .reduce((x, y) => x + y);
+        } else {
+          // The player guessed wrong
+          game.lives--;
+          ui.livesDiv.textContent = game.lives;
+          ui.showLayer(ui.svgPaths.pop());
+          ui.msg(ui.getRandomWord(ui.errorMessages), "error");
+          ui.playError();
         }
-        if (game.lives <= 0) {
-          game.inProgress=false;
-          game.losses++;
-          ui.winsDiv.innerHTML = `Wins: ${game.wins} | Losses: ${game.losses}`;
-          ui.msg("You're Dead!!!", "error");
-          ui.showLayer("lose");
-          ui.showModel();
-        }
-      } // end if games.lives > 0 
+        // Save the current guesses from the game
+        game.guesses.push(currentLetter);
+        ui.guessesDiv.innerHTML = game.guesses
+          .map(guess => ` ${guess} `)
+          .reduce((x, y) => x + y);
+      }
+
+      // Check to see if the player lost
+      if (game.lives <= 0) {
+        game.inProgress = false;
+        game.losses++;
+        ui.setWins();
+        ui.msg("You're Dead!!!", "error");
+        ui.showLayer("lose");
+        ui.showModel();
+        ui.playLose();
+      }
 
       console.log(game);
-    }
-    else if(game.inProgress===true){
+    } else if (game.inProgress === true) {
       ui.msg("Not a letter", "error");
       console.log(currentLetter);
     }
@@ -146,9 +164,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   };
 });
 
-
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -164,13 +181,13 @@ function getAds() {
   
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(3);
+var content = __webpack_require__(4);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -178,7 +195,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(5)(content, options);
+var update = __webpack_require__(6)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -195,21 +212,21 @@ if(false) {
 }
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(5)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, "body {\n  padding: 0px;\n  margin: 0px;\n}\n#game {\n    padding: 20px;\n}\n#svg {\n  float: left;\n  width: 50%;\n}\n#gameInfo {\n    padding: 2.5%;\n  float: right;\n  width: 45%;\n}\n#word {\n    background:red;\n    text-align: center;\n    margin:auto;\n}\n#guesses {\n  background: darkslategrey;\n  color: white;\n  height: 100px;\n  text-align: center;\n  font-size: 5em;\n}\n#message {\n  font-size: 2em;\n  padding: 20px;\n}\n.success {\n  background: lightgreen;\n  border: solid 1px green;\n}\n.error {\n  background: lightsalmon;\n  border: solid 1px red;\n}\n.letter {\n  width: 7%;\n  margin: 0 10px;\n  background: white;\n  text-align: center;\n  font-size: 5em;\n  border-bottom: solid 5px black;\n  color: white;\n  float: left;\n}\n.showLetter {\n  color: black;\n}\n.clearfix {\n  clear: both;\n}\n\n\n#model{\n    background: black;\n    color: white;\n    position: fixed;\n    width: 500px;\n    height: 200px;\n    top: 50%;\n    left: 50%;\n    margin-top: -100px; /* Negative half of height. */\n    margin-left: -250px;\n\n}\n#model button{\n    background: red;\n    border: none;\n    color: white;\n    padding: 20px;\n}\n#model-outer{\n    position: fixed;\n    top: 0;\n    left: 0;\n    opacity: 0.1;\n    height: 100%;\n    width: 100%;\n    background: red;\n}\n#model-inner{\n    text-align: center;\n    padding: 20px;\n}", ""]);
+exports.push([module.i, "body {\n  background:orange;\n  padding: 0px;\n  margin: 0px;\n}\n#game {\n    padding: 20px;\n}\n#svg {\n  float: left;\n  width: 50%;\n}\n#gameInfo {\n  padding: 2.5%;\n  float: right;\n  width: 45%;\n}\n#word {\n    text-align: center;\n    margin:auto;\n}\n#guesses {\n  margin: 20px 0px;\n  border: solid 1px darkslategrey;\n  color: darkslategrey;\n  height: 100px;\n  text-align: center;\n  font-size: 5em;\n}\n#message {\n  font-size: 2em;\n  padding: 20px;\n}\n.success {\n  background: lightgreen;\n  border: solid 1px green;\n}\n.error {\n  background: lightsalmon;\n  border: solid 1px red;\n}\n.underline{\n  border-bottom: solid 5px black;\n}\n.letter {\n  width: 7%;\n  margin: 0 10px;\n  text-align: center;\n  font-size: 5em;\n  color:orange;\n  float: left;\n}\n.showLetter {\n  color: black;\n}\n.clearfix {\n  clear: both;\n}\n\n\n#model{\n    background: black;\n    color: white;\n    position: fixed;\n    width: 500px;\n    height: 200px;\n    top: 50%;\n    left: 50%;\n    margin-top: -100px; /* Negative half of height. */\n    margin-left: -250px;\n\n}\n#model button{\n    background: red;\n    border: none;\n    color: white;\n    padding: 20px;\n}\n#model-outer{\n    position: fixed;\n    top: 0;\n    left: 0;\n    opacity: 0.1;\n    height: 100%;\n    width: 100%;\n    background: red;\n}\n#model-inner{\n    text-align: center;\n    padding: 20px;\n}\n\n.guess{\n  background:white;\n  color:black;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  margin-top: -50px;\n  margin-left: -50px;\n  text-align: center;\n  border: solid 5px black;\n  font-size: 4em;\n  height: 100px;\n  width: 100px;\n  animation-name: guess;\n  animation-duration: 1s;\n  visibility: hidden;\n}\n\n@keyframes guess {\n  0%   {visibility: visible}\n  25%  {background-color:white;}\n  50%  {background-color:yellow;}\n  100% {visibility: hidden;}\n}\n\n.score{\n  background: black;\n  color:white;\n  width: 50%;\n  text-align: center;\n  float:left;\n  padding: 20px 0px;\n}\n.score:nth-child(2n){\n  background:darkorange;\n}\n.score #wins, .score #losses{\n  font-size: 10em;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 /*
@@ -291,7 +308,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -337,7 +354,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(6);
+var	fixUrls = __webpack_require__(7);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -650,7 +667,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 
@@ -745,13 +762,13 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = gameState;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dictionary_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRandomWord_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dictionary_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRandomWord_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getLettersFromWord_js__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__getUniqueLetters_js__ = __webpack_require__(11);
 
@@ -761,6 +778,7 @@ module.exports = function (css) {
 
 function gameState(){
   return {
+    "debug": false,
     "inProgress": true,
     "name": "",
     "lives": 0,
@@ -784,47 +802,77 @@ function gameState(){
     "letterInWord": function(letter){
       let matches = document.getElementsByClassName(`letter${event.key}`);
       var nodes = Array.prototype.slice.call(matches);
-      nodes.map(this.showClass);
+      nodes.map(this.addClass);
+      nodes.map(this.removeClass);
       return this.word.includes(letter);
     },
-    "showClass": function (match) { return match.classList.add("showLetter")}
+    "addClass": function (match) { 
+      return match.classList.add("showLetter")
+    },
+    "removeClass": function(match){
+      match.classList.remove("underline");
+    }
   }
 }
-
-
-// game.uniqueLetters = game.uniqueLetters.filter(
-//   letter => letter !== currentLetter
-// );
-
-/***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = dictionary;
-function dictionary() {
-    return [
-        "umbrella",
-        "doberman",
-        "computer",
-        "laptop",
-        "screen",
-        "lightbulb",
-        "party"
-      ];
-  }
-  
 
 /***/ }),
 /* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = getRandomWord;
-function getRandomWord(array) {
-  return array[Math.floor(Math.random() * array.length)];
-}
-
+/* harmony export (immutable) */ __webpack_exports__["a"] = dictionary;
+function dictionary() {
+    return [
+        "zombie",
+        "halloween",
+        "pumpkin",
+        "monster",
+        "dark",
+        "darkness",
+        "dead",
+        "demon",
+        "devil",
+        "devilish",
+        "disguise",
+        "dreadful",
+        "death",
+        "hair-raising",
+        "Halloween",
+        "hat",
+        "haunt",
+        "haunted house",
+        "hayride",
+        "headstone",
+        "hobgoblin",
+        "hocus pocus",
+        "horrible",
+        "horrify",
+        "howl",
+        "party",
+        "petrify",
+        "phantasm",
+        "phantom",
+        "pirate",
+        "pitchfork",
+        "poltergeist",
+        "potion",
+        "prank",
+        "pretend",
+        "prince",
+        "princess",
+        "pumpkin",
+        "thrilling",
+        "tiara",
+        "toga",
+        "tomb",
+        "tombstone",
+        "treat",
+        "treats",
+        "trick"
+      ];
+  }
+  
+  
 
 /***/ }),
 /* 10 */
@@ -855,46 +903,43 @@ function getUniqueLetters(array) {
 /* harmony export (immutable) */ __webpack_exports__["a"] = uiState;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__hideLayer_js__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__showLayer_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__game_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getRandomWord_js__ = __webpack_require__(0);
 /* Dependancies */
 
 
 
 
-/* Nodes from SVG DOM */
-const svg = document.getElementById("zombies");
-const livesDiv = document.getElementById("lives");
-
-/* Nodes from HTML DOM */
-const messageDiv = document.getElementById("message");
-const guessesDiv = document.getElementById("guesses");
-const winsDiv = document.getElementById("wins");
-const adsDiv = document.getElementById("ads");
-const debugDiv = document.getElementById("debug");
-const yesPlay = document.getElementById("yesPlay");
-const noPlay = document.getElementById("noPlay");
-
-
 function uiState(game){
   return {
+    "successMessages": ["Nailed it! Good Job!", "That'll Work!", "Awesome, Good Show!"],
+    "errorMessages": ["Close Miss!", "Learn to guess already!", "Poor Form Old Chap!"],
     /* HTML DOM */
-    "messageDiv": messageDiv,
-    "guessesDiv": guessesDiv,
-    "adsDiv": adsDiv,
-    "debugDiv": debugDiv,
-    "yesPlay": yesPlay,
-    "noPlay": noPlay,
+    "messageDiv": document.getElementById("message"),
+    "guessesDiv": document.getElementById("guesses"),
+    "adsDiv": document.getElementById("ads"),
+    "debugDiv": document.getElementById("debug"),
+    "yesPlay": document.getElementById("yesPlay"),
+    "noPlay": document.getElementById("noPlay"),
     "word": word,
-    "winsDiv": winsDiv,
+    "winsDiv": document.getElementById("wins"),
+    "lossesDiv": document.getElementById("losses"),
     /* SVG DOM */
     "svgPaths" : ["arm1", "arm2", "arm3", "arm4", "tree", "grave", "moon"],
-    "livesDiv": livesDiv,
-    "svg": svg,
+    "livesDiv": document.getElementById("lives"),
+    "svg": document.getElementById("zombies"),
+    /* Sounds */
+    "sndSuccess": new Audio('./assets/sounds/success.mp3'),
+    "sndScary": new Audio('./assets/sounds/scary.mp3'),
+    "sndWin": new Audio('./assets/sounds/win.mp3'),
+    "sndLose": new Audio('./assets/sounds/lose.mp3'),
+    "sndZombie": new Audio('./assets/sounds/zombie.mp3'),
     "startGame": function(){
         // hides all the svgPaths that get exposed on wrong guesses
         game.reset();
+        if(game.debug){this.debugDiv.innerHTML = `<pre>${JSON.stringify(game, null, 2)}</pre>`};
         console.log(game);
-        this.messageDiv.innerHTML = "Please guess a letter";
+        this.msg("Please Guess a letter", "success");
+        // this.messageDiv.innerHTML = "Please guess a letter";
         this.hideLayer("win");
         this.hideLayer("lose");
         this.hideModel();
@@ -902,6 +947,12 @@ function uiState(game){
         this.clearGuessesDiv();
         game.wordLetters.map(this.setupCards);
         this.resetSvg();
+    },
+    "showGuess": function(letter){
+        let div = document.createElement('div');
+        div.innerHTML=letter;
+        document.body.appendChild(div);
+        div.classList="guess";
     },
     "hideModel": function(){
         document
@@ -932,15 +983,16 @@ function uiState(game){
     "setupCards": function (letter) {
         const word = document.getElementById("word");
         var divLetter = document.createElement("div");
-        divLetter.classList = `letter letter${letter}`;
+        divLetter.classList = `letter`;
+        divLetter.classList = `letter underline letter${letter}`;
         divLetter.innerHTML = letter;
         word.appendChild(divLetter);
     },
     "clearGuessesDiv": function(){
-        guessesDiv.innerHTML ="";
+        this.guessesDiv.innerHTML ="";
     },
     "resetSvg": function(){
-        livesDiv.textContent = game.lives;
+        this.livesDiv.textContent = game.lives;
         this.svgPaths = ["arm1", "arm2", "arm3", "arm4", "tree", "grave", "moon"];
         this.svgPaths.map(__WEBPACK_IMPORTED_MODULE_0__hideLayer_js__["a" /* hideLayer */]);
     },
@@ -950,12 +1002,37 @@ function uiState(game){
         }
         this.messageDiv.innerHTML = message;
     },
+    "getRandomWord": function(arr){
+        return Object(__WEBPACK_IMPORTED_MODULE_2__getRandomWord_js__["a" /* getRandomWord */])(arr);
+    },
     "debug": function(){
-        this.debugDiv.innerHTML = `<pre>${JSON.stringify(game, null, 2)}</pre>`;
+        if(game.debug){this.debugDiv.innerHTML = `<pre>${JSON.stringify(game, null, 2)}</pre>`};
     },
     "setWins": function(){
-        this.winsDiv.innerHTML = `Wins: ${game.wins} | Losses: ${game.losses}`;
-    }    
+        this.winsDiv.innerHTML = game.wins;
+        this.lossesDiv.innerHTML = game.losses;
+    },
+    "playSuccess": function(){
+        // this.sndSuccess.play();
+        this.sndSuccess.load();
+        this.sndSuccess.play();
+    },
+    "playError": function(){
+        this.sndScary.load();
+        this.sndScary.play();
+    },
+    "playWin": function(){
+        this.sndWin.load();
+        this.sndWin.play();
+    },
+    "playLose": function(){
+        this.sndLose.load();
+        this.sndLose.play();
+    },
+    "playZombie": function(){
+        this.sndZombie.load();
+        this.sndZombie.play();
+    }
   }
 }
 
@@ -985,29 +1062,6 @@ function hideLayer(node){
 function showLayer(node){
     const svg = document.getElementById("zombies");
     svg.getElementById(node).setAttribute("visibility", "visible");
-}
-  
-
-/***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export guessedLetter */
-/* unused harmony export letterInWord */
-const showClass = match => match.classList.add("showLetter");
-
-function guessedLetter(currentLetter, gameState) {
-  console.log(gameState);
-  console.log(currentLetter);
-  return gameState.guesses.includes(currentLetter);
-}
-
-function letterInWord(letter, word){
-    let matches = document.getElementsByClassName(`letter${event.key}`);
-    var nodes = Array.prototype.slice.call(matches);
-    nodes.map(showClass);
-    return word.includes(letter);
 }
   
 

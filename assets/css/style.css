@@ -1,4 +1,5 @@
 body {
+  background:orange;
   padding: 0px;
   margin: 0px;
 }
@@ -10,18 +11,18 @@ body {
   width: 50%;
 }
 #gameInfo {
-    padding: 2.5%;
+  padding: 2.5%;
   float: right;
   width: 45%;
 }
 #word {
-    background:red;
     text-align: center;
     margin:auto;
 }
 #guesses {
-  background: darkslategrey;
-  color: white;
+  margin: 20px 0px;
+  border: solid 1px darkslategrey;
+  color: darkslategrey;
   height: 100px;
   text-align: center;
   font-size: 5em;
@@ -38,14 +39,15 @@ body {
   background: lightsalmon;
   border: solid 1px red;
 }
+.underline{
+  border-bottom: solid 5px black;
+}
 .letter {
   width: 7%;
   margin: 0 10px;
-  background: white;
   text-align: center;
   font-size: 5em;
-  border-bottom: solid 5px black;
-  color: white;
+  color:orange;
   float: left;
 }
 .showLetter {
@@ -86,4 +88,44 @@ body {
 #model-inner{
     text-align: center;
     padding: 20px;
+}
+
+.guess{
+  background:white;
+  color:black;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -50px;
+  text-align: center;
+  border: solid 5px black;
+  font-size: 4em;
+  height: 100px;
+  width: 100px;
+  animation-name: guess;
+  animation-duration: 1s;
+  visibility: hidden;
+}
+
+@keyframes guess {
+  0%   {visibility: visible}
+  25%  {background-color:white;}
+  50%  {background-color:yellow;}
+  100% {visibility: hidden;}
+}
+
+.score{
+  background: black;
+  color:white;
+  width: 50%;
+  text-align: center;
+  float:left;
+  padding: 20px 0px;
+}
+.score:nth-child(2n){
+  background:darkorange;
+}
+.score #wins, .score #losses{
+  font-size: 10em;
 }

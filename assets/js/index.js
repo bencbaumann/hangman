@@ -1,4 +1,4 @@
-import { getAd } from "./modules/getAd.js";
+import "../css/reset.css";
 import "../css/style.css";
 import { gameState } from "./modules/gameState.js";
 import { uiState } from "./modules/uiState.js";
@@ -20,12 +20,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
   document.onkeyup = function(event) {
     const currentLetter = event.key.toLowerCase();
     // Check to see if the game is in progress, and that a letter was pressed.
-    if (currentLetter.length === 1 && game.inProgress === true) {
+    if (currentLetter.length === 1 && event.key.toLowerCase().match(/[a-z]{1}/) && game.inProgress === true) {
       // Checks if the player already guessed this letter
       if (game.guessedLetter(currentLetter, game)) {
         ui.messageDiv.innerHTML = "That was a guessed letter";
       } else {
         ui.showGuess(currentLetter);
+        ui.updateAd();
         // The player guessed correct
         if (game.letterInWord(currentLetter, game.wordLetters)) {
           ui.msg(ui.getRandomWord(ui.successMessages), "success");

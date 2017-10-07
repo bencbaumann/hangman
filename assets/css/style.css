@@ -43,7 +43,8 @@ body {
   border-bottom: solid 5px black;
 }
 .letter {
-  width: 7%;
+  padding: 5px;
+  width: 4%;
   margin: 0 10px;
   text-align: center;
   font-size: 5em;
@@ -100,7 +101,7 @@ body {
   margin-left: -50px;
   text-align: center;
   border: solid 5px black;
-  font-size: 4em;
+  font-size: 5em;
   height: 100px;
   width: 100px;
   animation-name: guess;
@@ -129,3 +130,19 @@ body {
 .score #wins, .score #losses{
   font-size: 10em;
 }
+
+@media screen and (max-width: 768px) {
+    #svg, #gameInfo{
+      margin: auto;
+      clear: both;
+      float:none;
+      width: 80%;
+    }
+    #svg{
+      /* margin: 0px 10%; */
+    }
+    #game{
+      margin: 0 10%;
+      padding: 0px;
+    }
+ }

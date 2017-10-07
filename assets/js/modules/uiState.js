@@ -2,6 +2,7 @@
 import { hideLayer } from "./hideLayer.js";
 import { showLayer } from "./showLayer.js";
 import { getRandomWord } from "./getRandomWord.js";
+import { getAds } from "./getAds.js";
 
 export function uiState(game){
   return {
@@ -39,6 +40,7 @@ export function uiState(game){
         this.hideModel();
         this.clearCards();
         this.clearGuessesDiv();
+        this.updateAd();
         game.wordLetters.map(this.setupCards);
         this.resetSvg();
     },
@@ -98,6 +100,10 @@ export function uiState(game){
     },
     "getRandomWord": function(arr){
         return getRandomWord(arr);
+    },
+    "updateAd": function(){
+        const ad = this.getRandomWord(getAds());
+        this.adsDiv.innerHTML=`<img src='${ad}' height="200px" width="200px" style="margin:20px" />`;
     },
     "debug": function(){
         if(game.debug){this.debugDiv.innerHTML = `<pre>${JSON.stringify(game, null, 2)}</pre>`};
